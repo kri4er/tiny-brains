@@ -1,0 +1,38 @@
+#article_content h3 {
+    font-weight: 700;
+}
+#article_content p {
+    margin-bottom: 0.75rem/* 12px */;
+    color: rgb(243 244 246);
+}
+
+#article_content a:link {
+    font-weight: 700;
+    color: rgb(147 197 253);
+    text-decoration-line: underline;
+}
+
+#article_content a:visited {
+    color: green;
+}
+
+#article_content a:hover {
+    color: hotpink;
+}
+
+#article_content a:active {
+    color: blue;
+}
+
+#article_content ol {
+    list-style-type: decimal;
+    margin-left: 1.75rem;
+    margin-bottom: 0.75rem;
+}
+
+#article_content pre {
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}

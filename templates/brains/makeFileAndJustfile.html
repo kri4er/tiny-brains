@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white antialiased dark:bg-gray-800">
+    <head>
+        <title>Tiny Brains - deploy on lambda</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.6"
+            integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous">
+        </script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            clifford: '#da373d',
+                        }
+                    }
+                }
+            }
+        </script>
+        <script>
+            function toggleThemeChange(value) {
+                if (!['light', 'dark'].includes(value)) {
+                    console.log("ERROR: provided input is invalid: " + value + ", should be either light or dark.")
+                }
+                localStorage.theme = value 
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark')
+                } else {
+                    document.documentElement.classList.remove('dark')
+                }
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="/assets/styles/index.css">
+    </head>
+    <body class="relative min-h-full bg-gray-800 dark:bg-gray-100">
+        <nav class="absolute rounded left-0 top-0 bg-gray-800 max-h-16 w-full">
+            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                <div class="relative flex h-16 items-center justify-between">
+                    <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        <!-- Mobile menu button-->
+                        <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="absolute -inset-0.5"></span>
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                        <div class="flex flex-shrink-0 items-center">
+                            <img class="h-8 w-auto" src="/assets/logo.png" alt="Tiny Brains">
+                        </div>
+                        <div class="hidden sm:ml-6 sm:block">
+                            <div class="flex space-x-4">
+                                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                                <a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Main Page</a>
+                                <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page"">Brains Search</a>
+                                <a href="/todos" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Roadmap</a>
+                                <a href="/aichat" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Chat with AI</a>
+                                <a href="/buy_me_a_coffe" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Buy me a coffee</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="dark" class="sr-only peer" onclick="if(this.checked) {toggleThemeChange('dark')} else { toggleThemeChange('light')}">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Enable dark mode</span>
+                        </label>
+                        <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                            <span class="absolute -inset-1.5"></span>
+                            <span class="sr-only">View notifications</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                            </svg>
+                        </button>
+                    </div
+                </div>
+            </div>
+        </nav>
+        <div class="w-svw min-h-full flex items-stretch">
+            <header class="min-w-96 max-w-96 bg-gray-800 min-h-full py-12">
+                <img src="/assets/logo.png" class="max-w-96 p-2"/>
+                <h2 class="text-3xl font-bold text-gray-100 sm:text-4xl p-2">A <span class="bg-red-400">blog</span><br>about building a blog</h2>
+                <p class="mt-2 text-lg leading-8 text-gray-100 p-2">
+                * HTMX, tailwindcss, rust, axum, askama.
+                <br>* 15 minute long video knowledge sharing
+                <br>* Share tools or work regular software engineer facing 
+                <br>* AI bot to navigate around tiny brains
+                </p>
+            </header>
+            <main class="self-stretch bg-gray-600 min-h-full w-svw py-12">
+                <div id="article_content" 
+                    class="p-3 m-3">
+                    
+                    <p 
+                    class="mb-3 text-gray-400 dark:text-gray-400 first-line:uppercase first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:me-3 first-letter:float-start"
+                    >Justfile as reproducible build configuration
+                    </p>
+                    <p 
+                    class="text-gray-100 dark:text-gray-400"
+                    >
+                    <br><br><bold class="font-bold">Premise</bold>
+                    <br>  I think CLI is one of the best ways to deliver information to the user.
+                    <br>It is mostly textual, clean, requires some understanding of tooling and has boundaries.
+                    <br>Though, commands and grow, and it is not a problem if you have a good shell, with history and easy way to find commands.
+                    <br>I'm happy with combination of: zsh(using oh-my-zsh) and fzf(fuzzy finder though files and command history). They both,
+                    <br>cover most of my usage cases. But. there are moments when you need have multiple commands grouped for project.
+                    <br>Like build, deploy, clean, fix-style. Test, or run some curl requests with extra credentials. All these require some level of 
+                    <br>programming in the configuration.
+                    <br><br><bold class="font-bold">How?</bold>
+                    <br>Most OS have some set of tooling to provide such capabilities. We can achieve it with bash script, write python, or even rust code.
+                    <br>But all of them are too general and too powerful for our task. This is where <bold class="font-bold"> GNU Make comes into play.</bold>
+                    <br> The tool is old build system used to specify build steps and commands line by line, and provide certain targets. 
+                    <br>Though today, we will talk about its analogue, a more modern tool 
+                    <a href="https://just.systems/man/en/chapter_1.html"
+                        class="font-medium text-blue-300 underline dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:no-underline"
+                        >just</a> - it has similar syntax, but extra features, like better CLI support
+                    <br>
+                    <br><br><bold class="font-bold">What?</bold>
+                    <br>  In article about lambda deployment we used cargo lambda with set of arguments to build and deploy our lambda.
+                    <br>Lets pack it into justfile
+                    </p>
+                    <pre class="rounded p-3 bg-gray-900 font-mono text-gray-100">
+alias b := build
+alias d := deploy
+alias bad := build-and-deploy
+
+build:
+    #!/usr/bin/env zsh
+    source ../.venv/bin/activate
+    cargo lambda build --release --arm64
+
+deploy:
+    #!/usr/bin/env zsh
+    source ../.venv/bin/activate
+    (
+    cargo lambda deploy --include templates --include assets --include tailwind.config.js \
+    --iam-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/personal-blog-v1-lambda-role --enable-function-url
+    )
+
+build-and-deploy:
+    just b | just d</pre>
+                    <p
+                    class="mb-3 text-gray-100 dark:text-gray-400"
+                    >
+                    <br> Now if we run just b, or just d, it will trigger set of commands we have specified 
+                    <br><br> Lets build new version of our blog, with this article added, and deploy to our account:
+                    <pre class="rounded p-3 bg-gray-900 font-mono text-gray-100">
+$just -l
+Available recipes:
+    build
+    b                # alias for `build`
+    build-and-deploy
+    bad              # alias for `build-and-deploy`
+    deploy
+    d                # alias for `deploy`
+
+$just bad
+                    </pre>
+
+                    </p>
+                    <p
+                    class="mb-3 text-gray-100 dark:text-gray-400"
+                    >
+                    <br> Great, now it is done. Read more about just. It allows writing commands in many languages and pipe outputs
+                    <br> Thank you for reading.
+                    </p>
+                </div>
+            </main>
+        </div>
+    </body>
+    <footer class="rounded-lg  bg-gray-900">
+        <div class="w-full max-w-screen-xl mx-automd:py-8">
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <a href="#" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                    <img src="/assets/logo.png" class="h-8" alt="Tiny Brains Logo" />
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Tiny Brains</span>
+                </a>
+                <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                    <li>
+                        <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:underline">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <hr class="my-6 sm:mx-auto border-gray-700 lg:my-8" />
+            <span class="block text-sm text-gray-400 sm:text-center">© 2024 <a href="#" class="hover:underline">Tiny Brains™</a>. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+</html>

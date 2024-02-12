@@ -1,0 +1,31 @@
+[package]
+name = "personal-page"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+askama = "0.12.1"
+axum = "0.7.4"
+lazy_static = "1.4.0"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.35.1", features = ["full"] }
+tower-http = { version = "0.5.1", features = ["fs"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Support marcdown to html conversion
+pulldown-cmark = { version = "0.9.1", default-features = false }
+
+[build]
+rustflags = ["-Z", "threads=4"]
+
+[package.metadata.lambda.deploy]
+memory = 128                   # Function's memory
+timeout = 5                   # Function's execution timeout
+tracing = "active"             # Tracing mode
+env_file = ".env.production"   # File to load environment variables from
+
+[package.metadata.lambda.env]
+AWS_REGION = "us-east-1"
