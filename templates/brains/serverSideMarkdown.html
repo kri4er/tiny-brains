@@ -10,7 +10,6 @@
         crossorigin="anonymous">
         </script>
         <link rel="stylesheet" type="text/css" href="/assets/styles/index.css"/>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-coy.min.css" rel="stylesheet" />
         <script>
             tailwind.config = {
                 theme: {
@@ -37,7 +36,6 @@
         </script>
     </head>
     <body class="relative min-h-full bg-gray-800 dark:bg-gray-100">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"></script>
         <nav class="absolute rounded left-0 top-0 bg-gray-800 max-h-16 w-full">
             <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 items-center justify-between">
@@ -102,7 +100,7 @@
                     class="p-3 m-3">
                     <p 
                     class="mb-3 text-gray-400 dark:text-gray-400 first-line:uppercase first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:me-3 first-letter:float-start"
-                    >Server side markdown renring
+                    >Server side markdown rendering
                     </p>
                     {{ md_generated_html|safe }}
                 </div>
