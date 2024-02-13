@@ -48,8 +48,14 @@ fn init_brains() {
     });
     brains.push(Brain {
         brain_url: "/brains/serverSideMarkdown".into(),
-        logo_url: "https://interrupt.memfault.com/img/gnu-make-guidelines/gnu-make.png".into(),
+        logo_url: "https://www.markdownguide.org/assets/images/markdown-mark-white.svg".into(),
         description: "Markdown support".into(),
+        md_file: Some("".into()),
+    });
+    brains.push(Brain {
+        brain_url: "/brains/enableDiagramViewer".into(),
+        logo_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Diagrams.net_Logo.svg/2048px-Diagrams.net_Logo.svg.png".into(),
+        description: "Diagram viewer".into(),
         md_file: Some("".into()),
     });
 }

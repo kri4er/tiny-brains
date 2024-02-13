@@ -35,6 +35,7 @@ pub fn get_brain_router() -> Router {
         .route("/hostOnLambda", get(host_on_lambda_page))
         .route("/makeFileAndJustFile", get(make_file_and_just_file))
         .route("/serverSideMarkdown", get(server_side_markdown_rendering))
+        .route("/enableDiagramViewer", get(enable_diagram_rendering))
 }
 
 
@@ -53,6 +54,12 @@ struct MakeFileAndJustFile;
 #[derive(Template)]
 #[template(path = "brains/serverSideMarkdown.html")]
 struct ServerSideMarkdown<'a> {
+    md_generated_html: &'a String,
+}
+
+#[derive(Template)]
+#[template(path = "brains/enableDiagramRendering.html")]
+struct EnableDiagramRendering<'a> {
     md_generated_html: &'a String,
 }
 
@@ -77,5 +84,14 @@ async fn server_side_markdown_rendering() -> Html<String> {
     let generated_html = md_to_html(file_content);
         
     let template = ServerSideMarkdown { md_generated_html: &generated_html };
+    Html(template.render().unwrap())
+}
+
+async fn enable_diagram_rendering() -> Html<String> {
+    let file_content = read_md_file(Path::new("templates/brains/md-articles/enable-draw-io-integration.md".into()))
+        .expect("Failed to convert md file to html");
+    let generated_html = md_to_html(file_content);
+        
+    let template = EnableDiagramRendering { md_generated_html: &generated_html };
     Html(template.render().unwrap())
 }

@@ -3,6 +3,13 @@
     color: rgb(243 244 246);
     margin-bottom: 0.75rem/* 12px */;
 }
+
+#article_content h4 {
+    font-weight: 700;
+    color: rgb(243 244 246);
+    margin-bottom: 0.75rem/* 12px */;
+}
+
 #article_content p {
     margin-bottom: 0.75rem/* 12px */;
     color: rgb(243 244 246);
@@ -26,7 +33,7 @@
     color: blue;
 }
 
-#article_content ol {
+#article_content ol, ul {
     color: rgb(243 244 246);
     list-style-type: decimal;
     margin-left: 1.75rem;
@@ -34,6 +41,14 @@
 }
 
 #article_content pre {
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    color: rgb(243 244 246);
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+#article_content code {
     border-radius: 0.25rem;
     padding: 0.75rem;
     color: rgb(243 244 246);
