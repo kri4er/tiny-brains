@@ -24,4 +24,5 @@ deploy:
     )
 
 build-and-deploy:
-    just build-release | just deploy
+    just build-release
+    just deploy
