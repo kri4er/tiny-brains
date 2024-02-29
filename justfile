@@ -12,6 +12,9 @@ build-release:
     source ../.venv/bin/activate
     cargo lambda build --release --arm64
 
+style:
+    npx tailwindcss -i styles/index_template.css -o styles/index.css --watch &
+
 watch:
     cargo watch -w styles -w templates -w src -x run
 

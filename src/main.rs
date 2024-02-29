@@ -58,15 +58,16 @@ fn init_brains() {
         description: "Diagram viewer".into(),
         md_file: Some("".into()),
     });
+    brains.push(Brain {
+        brain_url: "/brains/testStorySinglePageApp".into(),
+        logo_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Diagrams.net_Logo.svg/2048px-Diagrams.net_Logo.svg.png".into(),
+        description: "Unit Test Story: Single Page Application".into(),
+        md_file: Some("".into()),
+    });
 }
 
-#[tokio::main]
-async fn main() {
-    tracing_subscriber::fmt::init();
-
-    init_brains();
-
-    let app = Router::new()
+fn root_router() -> Router {
+    Router::new()
         .route("/", get(index_page))
         .route("/index", get(index_page))
         .route("/health", get(health))
@@ -77,8 +78,16 @@ async fn main() {
         .nest("/assets", static_assets())
         .nest("/brains", get_brain_router())
         .fallback(handle_404)
-        ;
 
+}
+
+#[tokio::main]
+async fn main() {
+    tracing_subscriber::fmt::init();
+
+    init_brains();
+
+    let app = root_router();
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
         .await.unwrap();

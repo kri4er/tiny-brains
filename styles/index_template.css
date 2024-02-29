@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 #article_content h2 {
-    @apply font-bold text-gray-100;
+    @apply font-bold text-gray-100 mb-1 mt-2;
 }
 #article_content h3 {
-    @apply font-bold text-gray-100;
+    @apply font-bold text-gray-100 mb-1 mt-2;
 }
 #article_content h4 {
-    @apply font-bold text-gray-100;
+    @apply font-bold text-gray-100 mb-1 mt-2;
 }
 #article_content h5 {
-    @apply font-bold text-gray-100;
+    @apply font-bold text-gray-100 mb-1 mt-2;
 }
 
 #article_content p {
-    @apply text-gray-100 dark:text-gray-400;
+    @apply text-gray-100 dark:text-gray-400 mb-2;
 }
 
 #article_content a {

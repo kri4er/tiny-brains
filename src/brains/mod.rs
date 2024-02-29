@@ -36,6 +36,7 @@ pub fn get_brain_router() -> Router {
         .route("/makeFileAndJustFile", get(make_file_and_just_file))
         .route("/serverSideMarkdown", get(server_side_markdown_rendering))
         .route("/enableDiagramViewer", get(enable_diagram_rendering))
+        .route("/testStorySinglePageApp", get(single_page_application_using_askama_and_htmx))
 }
 
 
@@ -61,6 +62,13 @@ struct ServerSideMarkdown<'a> {
 #[template(path = "brains/enableDiagramRendering.html")]
 struct EnableDiagramRendering<'a> {
     md_generated_html: &'a String,
+}
+
+#[derive(Template)]
+#[template(path = "brains/template_fragments/article_template.html")]
+struct UnitTestStory {
+    caption: String,
+    md_sections: Vec<String>,
 }
 
 async fn search_page() -> Html<String> {
@@ -95,3 +103,21 @@ async fn enable_diagram_rendering() -> Html<String> {
     let template = EnableDiagramRendering { md_generated_html: &generated_html };
     Html(template.render().unwrap())
 }
+
+fn section(path: &Path)-> String {
+    let file_content = read_md_file(path.into())
+        .expect("Failed to convert md file to html");
+    md_to_html(file_content)
+}
+
+async fn single_page_application_using_askama_and_htmx() -> Html<String> {
+    let md_sections = vec![
+            section(Path::new("templates/brains/md-articles/single-page-app-experience-with-htmx.md")),
+        ];
+    let template = UnitTestStory { 
+        caption: "Unit test story.".into(),
+        md_sections
+    };
+    Html(template.render().unwrap())
+}
+

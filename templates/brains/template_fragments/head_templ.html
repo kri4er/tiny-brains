@@ -1,0 +1,20 @@
+<head>
+    <title>Tiny Brains - deploy on lambda</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/index.css"/>
+    <script>
+        function toggleThemeChange(value) {
+            if (!['light', 'dark'].includes(value)) {
+                console.log("ERROR: provided input is invalid: " + value + ", should be either light or dark.")
+            }
+            localStorage.theme = value 
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+        }
+    </script>
+</head>
